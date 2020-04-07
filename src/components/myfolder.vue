@@ -31,8 +31,8 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><span @click="deleteFile(item.folderUrl)">删除</span></el-dropdown-item>
-              <el-dropdown-item>编辑</el-dropdown-item>
-              <el-dropdown-item>重命名</el-dropdown-item>
+              <el-dropdown-item v-if="item.authority === 1"><span @click="changeFolderAuthority(item.authority, item.folderUrl)">私有</span></el-dropdown-item>
+              <el-dropdown-item v-if="item.authority === 0"><span @click="changeFolderAuthority(item.authority, item.folderUrl)">公开</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <img src="../assets/picture/text.png" />
@@ -45,7 +45,6 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item><span @click="deleteFile(item.folderUrl)">删除</span></el-dropdown-item>
-              <el-dropdown-item>重命名</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <img src="../assets/picture/folder.png" />
@@ -108,6 +107,15 @@ export default {
     }
   },
   methods: {
+    changeFolderAuthority (authority, filePath) {
+      this.$axios({
+        method: 'GET',
+        url: 'http://localhost:8888/folder/changeFolderAuthority?filePath=' + filePath + '&authority=' + authority
+      }).then((res) => {
+        this.$message.success(res.data)
+        this.refresh()
+      })
+    },
     // 常见文件夹
     createFolder () {
       // 创建文件夹携带的数据
@@ -122,8 +130,6 @@ export default {
         url: 'http://localhost:8888/folder/createFolder',
         data: this.$qs.stringify(folderData)
       }).then((res) => {
-        this.createFileDialog = false
-        alert(this.createFileDialog)
         this.$message.success(res.data)
         this.refresh()
       })
@@ -162,10 +168,10 @@ export default {
     getCurrentFilePath () {
       var filePathTemp = ''
       for (var i = 0; i < this.filePathItem.length; i++) {
-        filePathTemp += this.filePathItem[i] + '\\'
+        filePathTemp += this.filePathItem[i] + '/'
       }
-      filePathTemp = this.getUserName() + '\\' + filePathTemp.replace(/>/g, '\\')
-      if (filePathTemp[filePathTemp.length - 1] === '\\') {
+      filePathTemp = this.getUserName() + '/' + filePathTemp.replace(/>/g, '/')
+      if (filePathTemp[filePathTemp.length - 1] === '/') {
         filePathTemp = filePathTemp.substring(0, filePathTemp.length - 1)
       }
       return filePathTemp

@@ -23,7 +23,13 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  Dialog
+  Dialog,
+  Option,
+  Select,
+  Table,
+  TableColumn,
+  Tag,
+  Loading
 } from 'element-ui'
 
 /* 将其定义为全局使用 */
@@ -50,4 +56,10 @@ Vue.use(Dropdown)
 Vue.use(DropdownItem)
 Vue.use(DropdownMenu)
 Vue.use(Dialog)
+Vue.use(Option)
+Vue.use(Select)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Tag)
+Vue.use(Loading)
 Vue.prototype.$message = Message
